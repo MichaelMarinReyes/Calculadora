@@ -33,6 +33,14 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    packagingOptions {
+        resources {
+            excludes += "/META-INF/INDEX.LIST"
+            excludes += "/META-INF/*.kotlin_module"
+        }
+        pickFirsts += "/META-INF/INDEX.LIST"
+    }
 }
 
 dependencies {
@@ -45,4 +53,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation("de.jflex:jflex:1.9.1")
+    implementation("com.github.vbmacher:java-cup-runtime:11b-20160615-3")
 }

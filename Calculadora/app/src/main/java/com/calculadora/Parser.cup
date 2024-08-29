@@ -1,0 +1,57 @@
+package com.calculadora;
+
+import java_cup.runtime.*;
+import com.calculadora.Lexer;
+import com.calculadora.ErrorLexico;
+import com.calculadora.ErrorSintactico;
+import java.util.ArrayList;
+
+class Parser;
+
+parser code {:
+    private ArrayList<ErrorSintactico> errorSintactico = new ArrayList();
+    public Double resultado = 0.0;
+
+    public ArrayList<ErrorSintactico> getErrorSintactico() {
+        return errorSintactico;
+    }
+
+    public Double getResultado() {
+        return resultado;
+    }
+
+    public void report_error(String message, Object info) {
+        if (info instanceof Symbol) {
+            Symbol s = (Symbol) info;
+            errorSintactico.add(new ErrorSintactico("Sintáctico", s.left + 1, s.right + 1, String.valueOf(s.value), message));
+            System.out.println("ERROR EN CUP " + String.valueOf(s.value) + " " + s.left+1);
+        } else {
+            System.out.println("Error sintáctico: " + message);
+        }
+    }
+
+    public void report_fatal_error(String message, Object info) throws Exception {
+        report_error(message, info);
+        throw new Exception("Error sintáctico irrecuperable.");
+    }
+
+:}
+
+terminal PARENTESIS_ABRE, PARENTESIS_CIERRA, SUMA, RESTA, MULTIPLICACION, DIVISION, NUMERO;
+
+non terminal inicial, operacion, errorSintactico;
+
+precedence left SUMA, RESTA;
+precedence left MULTIPLICACION, DIVISION;
+
+start with inicial;
+
+inicial ::= operacion:res {: resultado = ((Number)res).doubleValue(); :};
+
+operacion ::= operacion:e1 SUMA operacion:e2                    {: RESULT = ((Number)e1).doubleValue() + ((Number)e2).doubleValue(); :}
+            | operacion:e1 RESTA operacion:e2                   {: RESULT = ((Number)e1).doubleValue() - ((Number)e2).doubleValue(); :}
+            | operacion:e1 MULTIPLICACION operacion:e2          {: RESULT = ((Number)e1).doubleValue() * ((Number)e2).doubleValue(); :}
+            | operacion:e1 DIVISION operacion:e2                {: RESULT = ((Number)e1).doubleValue() / ((Number)e2).doubleValue(); :}
+            | PARENTESIS_ABRE operacion:e PARENTESIS_CIERRA     {: RESULT = ((Number)e).doubleValue(); :}
+            | NUMERO:n                                          {: RESULT = ((Number)n).doubleValue(); :}
+            | errorSintactico:err                               {: report_error("Error al ingresar", err); :};
