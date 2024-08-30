@@ -26,14 +26,23 @@ class VistaResultado(context: Context?, private val resultado: Double?) : View(c
         canvas.drawRGB(255, 255, 255)
 
         // Configurar el texto
-        val resultadoTexto = "El resultado de su operación es: ${resultado ?: "Sin resultado"}"
+        val textoResultado = "El resultado es"
+        val valorResultado = resultado?.toString() ?: "Sin resultado"
 
-        //Centrar en la pantalla
-        val textAncho = paint.measureText(resultadoTexto)
-        val posX = (canvas.width - textAncho) / 2
-        val posY = canvas.height / 2f
+        // Medir el ancho y altura de cada línea de texto
+        val anchoTextoResultado = paint.measureText(textoResultado)
+        val anchoValorResultado = paint.measureText(valorResultado)
+        val textHeight = paint.fontMetrics.bottom - paint.fontMetrics.top
+
+        // Calcular posiciones para centrar el texto en el canvas
+        val posXTexto = (canvas.width - anchoTextoResultado) / 2
+        val posXValor = (canvas.width - anchoValorResultado) / 2
+
+        val posYTexto = (canvas.height - 2 * textHeight) / 2
+        val posYValor = posYTexto + textHeight
 
         // Dibujar el texto en el Canvas
-        canvas.drawText(resultadoTexto, posX, posY, paint)
+        canvas.drawText(textoResultado, posXTexto, posYTexto, paint)
+        canvas.drawText(valorResultado, posXValor, posYValor, paint)
     }
 }
