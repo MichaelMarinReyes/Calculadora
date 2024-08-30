@@ -34,5 +34,5 @@ import java.util.ArrayList;
 "("               { return new Symbol(ParserSym.PARENTESIS_ABRE, yyline+1, yycolumn+1, yytext()); }
 ")"               { return new Symbol(ParserSym.PARENTESIS_CIERRA, yyline+1, yycolumn+1, yytext()); }
 <<EOF>>           { return new Symbol(ParserSym.EOF); }
-[^]               { errores.add(new ErrorLexico(yytext(), yyline + 1, yycolumn + 1, "Léxico", "Caracter desconocido: " + yytext()));
+[^]               { errores.add(new ErrorLexico("Léxico", yyline + 1, yycolumn + 1, yytext(), "Caracter desconocido: " + yytext()));
           System.err.println("Error léxico: " + yytext() + " linea: " + String.valueOf(yyline + 1) + " columna: " + String.valueOf(yycolumn + 1));}

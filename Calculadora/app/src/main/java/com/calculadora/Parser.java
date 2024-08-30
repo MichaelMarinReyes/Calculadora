@@ -114,7 +114,7 @@ public class Parser extends java_cup.runtime.lr_parser {
 
 
 
-    private ArrayList<ErrorSintactico> errorSintactico = new ArrayList();
+    public static ArrayList<ErrorSintactico> errorSintactico = new ArrayList();
     public Double resultado = 0.0;
 
     public ArrayList<ErrorSintactico> getErrorSintactico() {
@@ -128,8 +128,10 @@ public class Parser extends java_cup.runtime.lr_parser {
     public void report_error(String message, Object info) {
         if (info instanceof Symbol) {
             Symbol s = (Symbol) info;
-            errorSintactico.add(new ErrorSintactico("Sintáctico", s.left + 1, s.right + 1, String.valueOf(s.value), message));
-            System.out.println("ERROR EN CUP " + String.valueOf(s.value) + " " + s.left+1);
+            int fila = s.left + 1;
+            int columna = s.right + 1;
+            String result = (s.value != null) ? String.valueOf(s.value) : " ";
+            errorSintactico.add(new ErrorSintactico("Sintáctico", fila, columna, result, "Se esperaba una operación"));
         } else {
             System.out.println("Error sintáctico: " + message);
         }

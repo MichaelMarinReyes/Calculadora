@@ -23,12 +23,17 @@ class VistaResultado(context: Context?, private val resultado: Double?) : View(c
         super.onDraw(canvas)
 
         // Color de fondo
-        canvas.drawRGB(0, 255, 0)
+        canvas.drawRGB(255, 255, 255)
 
         // Configurar el texto
         val resultadoTexto = "El resultado de su operación es: ${resultado ?: "Sin resultado"}"
 
+        //Centrar en la pantalla
+        val textAncho = paint.measureText(resultadoTexto)
+        val posX = (canvas.width - textAncho) / 2
+        val posY = canvas.height / 2f
+
         // Dibujar el texto en el Canvas
-        canvas.drawText(resultadoTexto, 50f, 100f, paint)
+        canvas.drawText(resultadoTexto, posX, posY, paint)
     }
 }
